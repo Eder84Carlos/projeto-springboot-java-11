@@ -12,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "tb_order") //anotação para não ter conflito com o nome da tabela padrão Order no banco de dados
 public class Order implements Serializable {
@@ -20,7 +22,9 @@ public class Order implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY) //as anotações para informar que é uma tabela no banco de dados 
 	private Long id;
-	private Instant moment;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'", timezone = "GMT")
+	private Instant moment; //essa anotação e para formata o instante do pedido
 	
 	@ManyToOne //muitos para 1 para gerar a chave estrangeira
 	@JoinColumn(name = "client_id")   // nome da chave estrangeira 
