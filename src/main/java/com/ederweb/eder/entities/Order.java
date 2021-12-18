@@ -18,7 +18,7 @@ public class Order implements Serializable {
 	private static final long serialVersionUID = 1L; //Id padrão
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY) //as anotações são para criar uma tabela no banco de dados 
+	@GeneratedValue(strategy = GenerationType.IDENTITY) //as anotações para informar que é uma tabela no banco de dados 
 	private Long id;
 	private Instant moment;
 	
