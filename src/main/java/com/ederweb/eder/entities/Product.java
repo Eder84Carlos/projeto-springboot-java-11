@@ -9,14 +9,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 @Entity
 @Table(name = "tb_product")
-public class Product implements Serializable{
+public class Product implements Serializable {
 	private static final long serialVersionUID = 1L;
-
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +27,8 @@ public class Product implements Serializable{
 	private Double price;
 	private String imgUrl;
 
-	@Transient
+	@ManyToMany // nome da tabela no banco relacional
+	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id")) 
 	private Set<Category> categories = new HashSet<>(); // Set serve para o produto não ter varias categorias
 														// A coleção comece vazia e não nula // para instaciar o Set
 														// precisa adicionar o Hash
@@ -35,13 +37,13 @@ public class Product implements Serializable{
 	}
 
 	public Product(Long id, String name, String description, Double price, String imgUrl) {
-		super();         
+		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.imgUrl = imgUrl;
-		// não se coloca a coleção no construtor por que ela ja se encontra instanciada 
+		// não se coloca a coleção no construtor por que ela ja se encontra instanciada
 	}
 
 	public Long getId() {
@@ -104,6 +106,5 @@ public class Product implements Serializable{
 		Product other = (Product) obj;
 		return Objects.equals(id, other.id);
 	}
-	
-	
+
 }
