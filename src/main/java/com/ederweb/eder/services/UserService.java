@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.ederweb.eder.entities.User;
 import com.ederweb.eder.repositories.UserRepository;
+import com.ederweb.eder.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class UserService {
@@ -21,7 +22,7 @@ public class UserService {
 	
 	public User findById(Long id) {
 		Optional<User> obj = repository.findById(id); //findById vai no banco de dados e pega o obj
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
 	public User insert(User obj) {  //inserir um novo objeto User no banco de dados
