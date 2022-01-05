@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.ederweb.eder.entities.User;
 import com.ederweb.eder.repositories.UserRepository;
+import com.ederweb.eder.services.exceptions.DatabaseException;
 import com.ederweb.eder.services.exceptions.ResourceNotFoundException;
 
 @Service
@@ -30,7 +33,13 @@ public class UserService {
 	}
 	
 	public void delete(Long id) { //deletar um usuario do banco de dados
+		try {
 		repository.deleteById(id);
+		} catch (EmptyResultDataAccessException e) {
+			throw new ResourceNotFoundException(id); //tratamento para erro de consulta
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
 	}
 	
 	
