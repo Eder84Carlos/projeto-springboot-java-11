@@ -3,6 +3,8 @@ package com.ederweb.eder.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -45,9 +47,13 @@ public class UserService {
 	
 	@SuppressWarnings("deprecation")
 	public User update(Long id, User obj) {
+		try {
 		User entity = repository.getOne(id); //getOne prepara o obj para depois execultar uma operção
 		updateData(entity, obj);
 		return repository.save(entity);
+	} catch (EntityNotFoundException e) {
+		throw new ResourceNotFoundException(id); 
+	}
 	}
 	
 	private void updateData(User entity, User obj) { //metodo para atualizar dados do User
